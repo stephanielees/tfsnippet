@@ -6,7 +6,7 @@ from .debugging import assert_deps
 from .tensor_wrapper import TensorWrapper
 
 try:
-    import zhusuan as zs
+    import zhusuan.bn as zs
     _DYNAMIC_TENSOR_TYPES = (tf.Tensor, tf.Variable, TensorWrapper,
                              zs.StochasticTensor)
 except ImportError:  # pragma: no cover
@@ -18,13 +18,12 @@ __all__ = [
 
 __INTEGER_TYPES = (
     six.integer_types +
-    (np.integer, np.int, np.uint,
+    (np.integer, np.uint,
      np.int8, np.int16, np.int32, np.int64,
      np.uint8, np.uint16, np.uint32, np.uint64)
 )
 __FLOATING_TYPES = (
     float,
-    np.float,
     np.float16, np.float32, np.float64,
 )
 
