@@ -1,7 +1,7 @@
 from functools import partial
 
 import tensorflow as tf
-from tensorflow.contrib.framework import add_arg_scope
+from tf_slim.ops.arg_scope import add_arg_scope
 
 from tfsnippet.utils import (validate_int_tuple_arg, is_integer,
                              add_name_and_scope_arg_doc, InputSpec,

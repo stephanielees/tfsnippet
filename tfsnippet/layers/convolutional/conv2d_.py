@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow.contrib.framework import add_arg_scope
+from tf_slim.ops.arg_scope import add_arg_scope
 
 from tfsnippet.ops import assert_rank, assert_scalar_equal
 from tfsnippet.utils import (validate_positive_int_arg, ParamSpec,

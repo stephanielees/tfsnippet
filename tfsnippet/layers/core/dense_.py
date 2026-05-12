@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.contrib.framework import add_arg_scope
+from tf_slim.ops.arg_scope import add_arg_scope
 
 from tfsnippet.utils import *
 from ..initialization import default_kernel_initializer
