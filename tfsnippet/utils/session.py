@@ -1,5 +1,6 @@
 import six
 import tensorflow as tf
+from tensorflow.compat.v1 import GraphKeys
 
 __all__ = [
     'create_session',
@@ -68,7 +69,7 @@ def get_default_session_or_error():
     return ret
 
 
-def get_variables_as_dict(scope=None, collection=tf.GraphKeys.GLOBAL_VARIABLES):
+def get_variables_as_dict(scope=None, collection=GraphKeys.GLOBAL_VARIABLES):
     """
     Get TensorFlow variables as dict.
 
@@ -78,7 +79,7 @@ def get_variables_as_dict(scope=None, collection=tf.GraphKeys.GLOBAL_VARIABLES):
             :class:`tf.VariableScope`, will collect the variables only from
             this scope. (default :obj:`None`)
         collection (str): Collect the variables only from this collection.
-            (default ``tf.GraphKeys.GLOBAL_VARIABLES``)
+            (default ``GraphKeys.GLOBAL_VARIABLES``)
 
     Returns:
         dict[str, tf.Variable]: Dict which maps from names to TensorFlow
@@ -111,7 +112,7 @@ def get_uninitialized_variables(variables=None, name=None):
     Args:
         variables (list[tf.Variable]): Collect only uninitialized variables
             within this list. If not specified, will collect all uninitialized
-            variables within ``tf.GraphKeys.GLOBAL_VARIABLES`` collection.
+            variables within ``GraphKeys.GLOBAL_VARIABLES`` collection.
         name (str): TensorFlow name scope of the graph nodes.
 
     Returns:
@@ -137,7 +138,7 @@ def ensure_variables_initialized(variables=None, name=None):
         variables (list[tf.Variable] or dict[str, tf.Variable]): Ensure only
             the variables within this collection to be initialized. If not
             specified, will ensure all variables within the collection
-            `tf.GraphKeys.GLOBAL_VARIABLES` to be initialized.
+            `GraphKeys.GLOBAL_VARIABLES` to be initialized.
         name (str): TensorFlow name scope of the graph nodes. (default
             `ensure_variables_initialized`)
     """
