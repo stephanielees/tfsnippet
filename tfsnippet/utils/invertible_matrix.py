@@ -291,7 +291,7 @@ class InvertibleMatrix(VarScopeObject):
                     dtype=dtype,
                     trainable=trainable
                 )
-                self._inv_matrix = tf.matrix_inverse(
+                self._inv_matrix = tf.linalg.inv(
                     self._matrix, name='inv_matrix')
 
                 if is_tensorflow_version_higher_or_equal('1.10.0'):
@@ -300,12 +300,12 @@ class InvertibleMatrix(VarScopeObject):
                 else:
                     # low versions of TensorFlow does not have a gradient op
                     # for `slogdet`, thus we have to derive it as follows:
-                    with tf.name_scope('log_det', values=[self._matrix]):
+                    with tf.compat.v1.name_scope('log_det', values=[self._matrix]):
                         m = self._matrix
                         if dtype != tf.float64:
                             m = tf.cast(m, dtype=tf.float64)
-                        self._log_det = tf.log(
-                            tf.maximum(tf.abs(tf.matrix_determinant(m)),
+                        self._log_det = tf.math.log(
+                            tf.maximum(tf.abs(tf.linalg.det(m)),
                                        epsilon)
                         )
                         if self._log_det.dtype != dtype:
@@ -361,29 +361,29 @@ class InvertibleMatrix(VarScopeObject):
                     trainable=trainable
                 )
 
-                with tf.name_scope('L', values=[pre_L]):
+                with tf.compat.v1.name_scope('L', values=[pre_L]):
                     L_mask = tf.constant(np.tril(np.ones(shape), k=-1),
                                          dtype=dtype)
                     L = self._L = L_mask * pre_L + tf.eye(*shape, dtype=dtype)
 
-                with tf.name_scope('U', values=[pre_U, sign, log_s]):
+                with tf.compat.v1.name_scope('U', values=[pre_U, sign, log_s]):
                     U_mask = tf.constant(np.triu(np.ones(shape), k=1),
                                          dtype=dtype)
-                    U = self._U = U_mask * pre_U + tf.diag(sign * tf.exp(log_s))
+                    U = self._U = U_mask * pre_U + tf.linalg.tensor_diag(sign * tf.exp(log_s))
 
-                with tf.name_scope('matrix', values=[P, L, U]):
+                with tf.compat.v1.name_scope('matrix', values=[P, L, U]):
                     self._matrix = tf.matmul(P, tf.matmul(L, U))
 
-                with tf.name_scope('inv_matrix', values=[P, L, U]):
+                with tf.compat.v1.name_scope('inv_matrix', values=[P, L, U]):
                     self._inv_matrix = tf.matmul(
-                        tf.matrix_inverse(U, name='inv_U'),
+                        tf.linalg.inv(U, name='inv_U'),
                         tf.matmul(
-                            tf.matrix_inverse(L, name='inv_L'),
-                            tf.matrix_inverse(P, name='inv_P'),
+                            tf.linalg.inv(L, name='inv_L'),
+                            tf.linalg.inv(P, name='inv_P'),
                         )
                     )
 
-                with tf.name_scope('log_det', values=[log_s]):
+                with tf.compat.v1.name_scope('log_det', values=[log_s]):
                     self._log_det = tf.reduce_sum(log_s)
 
     @property

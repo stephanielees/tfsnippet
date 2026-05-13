@@ -184,10 +184,10 @@ class TensorWrapper(object):
         return tf.multiply(other, self)
 
     def __div__(self, other):
-        return tf.div(self, other)
+        return tf.compat.v1.div(self, other)
 
     def __rdiv__(self, other):
-        return tf.div(other, self)
+        return tf.compat.v1.div(other, self)
 
     def __truediv__(self, other):
         return tf.truediv(self, other)
@@ -196,16 +196,16 @@ class TensorWrapper(object):
         return tf.truediv(other, self)
 
     def __floordiv__(self, other):
-        return tf.floordiv(self, other)
+        return tf.math.floordiv(self, other)
 
     def __rfloordiv__(self, other):
-        return tf.floordiv(other, self)
+        return tf.math.floordiv(other, self)
 
     def __mod__(self, other):
-        return tf.mod(self, other)
+        return tf.math.floormod(self, other)
 
     def __rmod__(self, other):
-        return tf.mod(other, self)
+        return tf.math.floormod(other, self)
 
     def __pow__(self, other):
         return tf.pow(self, other)
@@ -230,10 +230,10 @@ class TensorWrapper(object):
         return tf.logical_or(other, self)
 
     def __xor__(self, other):
-        return tf.logical_xor(self, other)
+        return tf.math.logical_xor(self, other)
 
     def __rxor__(self, other):
-        return tf.logical_xor(other, self)
+        return tf.math.logical_xor(other, self)
 
     # boolean operations
     def __lt__(self, other):

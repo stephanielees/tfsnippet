@@ -249,7 +249,7 @@ def validate_n_samples_arg(value, name):
     if is_tensor_object(value):
         @contextlib.contextmanager
         def mkcontext():
-            with tf.name_scope('validate_n_samples'):
+            with tf.compat.v1.name_scope('validate_n_samples'):
                 yield
     else:
         @contextlib.contextmanager
@@ -284,7 +284,7 @@ def validate_group_ndims_arg(group_ndims, name=None):
     @contextlib.contextmanager
     def gen_name_scope():
         if is_tensor_object(group_ndims):
-            with tf.name_scope(name, default_name='validate_group_ndims'):
+            with tf.compat.v1.name_scope(name, default_name='validate_group_ndims'):
                 yield
         else:
             yield

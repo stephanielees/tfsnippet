@@ -149,7 +149,7 @@ class TensorArgValidator(object):
         """
         return self._value_test(
             value,
-            lambda v, m: tf.assert_greater_equal(
+            lambda v, m: tf.compat.v1.assert_greater_equal(
                 v, tf.constant(0, value.dtype), message=m),
             lambda v: v >= 0,
             '{} must be non-negative'
@@ -173,7 +173,7 @@ class TensorArgValidator(object):
         """
         return self._value_test(
             value,
-            lambda v, m: tf.assert_greater(
+            lambda v, m: tf.compat.v1.assert_greater(
                 v, tf.constant(0, dtype=value.dtype), message=m),
             lambda v: v > 0,
             '{} must be positive'

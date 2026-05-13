@@ -102,7 +102,7 @@ def flatten_to_ndims(x, ndims, name=None):
     if len(shape) == ndims:
         return x, None, None
 
-    with tf.name_scope(name, default_name='flatten', values=[x]):
+    with tf.compat.v1.name_scope(name, default_name='flatten', values=[x]):
         if ndims == 1:
             static_shape = shape
             if None in shape:
@@ -155,7 +155,7 @@ def unflatten_from_ndims(x, static_front_shape, front_shape, name=None):
     if not is_tensor_object(front_shape):
         front_shape = tuple(front_shape)
 
-    with tf.name_scope(name, default_name='unflatten', values=[x]):
+    with tf.compat.v1.name_scope(name, default_name='unflatten', values=[x]):
         back_shape = shape[1:]
         static_back_shape = back_shape
         if None in back_shape:
@@ -183,7 +183,7 @@ def get_batch_size(tensor, axis=0, name=None):
     """
     tensor = tf.convert_to_tensor(tensor)
     axis = int(axis)
-    with tf.name_scope(name, default_name='get_batch_size', values=[tensor]):
+    with tf.compat.v1.name_scope(name, default_name='get_batch_size', values=[tensor]):
         batch_size = None
         shape = get_static_shape(tensor)
         if shape is not None:
@@ -232,7 +232,7 @@ def get_dimensions_size(tensor, axis=None, name=None):
         if not axis:
             return ()
 
-    with tf.name_scope(name, default_name='get_dimensions_size',
+    with tf.compat.v1.name_scope(name, default_name='get_dimensions_size',
                        values=[tensor]):
         shape = get_static_shape(tensor)
 
@@ -270,7 +270,7 @@ def concat_shapes(shapes, name=None):
             s if is_tensor_object(s) else tf.constant(s, dtype=tf.int32)
             for s in shapes
         ]
-        with tf.name_scope(name, default_name='concat_shapes', values=shapes):
+        with tf.compat.v1.name_scope(name, default_name='concat_shapes', values=shapes):
             return tf.concat(shapes, axis=0)
     else:
         return sum((tuple(s) for s in shapes), ())
@@ -314,14 +314,14 @@ def is_shape_equal(x, y, name=None):
             return True
 
         # generate the dynamic check
-        with tf.name_scope(name or 'is_shape_equal', values=[x, y]):
+        with tf.compat.v1.name_scope(name or 'is_shape_equal', values=[x, y]):
             x_shape = get_shape(x)
             y_shape = get_shape(y)
             return tf.reduce_all([tf.equal(x_shape[a], y_shape[a])
                                   for a in axis_to_check])
 
     # either one of the shapes has non-deterministic dimensions
-    with tf.name_scope(name or 'is_shape_equal', values=[x, y]):
+    with tf.compat.v1.name_scope(name or 'is_shape_equal', values=[x, y]):
         x_shape = get_shape(x)
         y_shape = get_shape(y)
         return tf.cond(
@@ -362,7 +362,7 @@ def broadcast_to_shape(x, shape, name=None):
     else:
         shape = tuple(int(s) for s in shape)
 
-    with tf.name_scope(name=name or 'broadcast_to_shape', values=ns_values):
+    with tf.compat.v1.name_scope(name=name or 'broadcast_to_shape', values=ns_values):
         cannot_broadcast_msg = (
             '`x` cannot be broadcasted to match `shape`: x {!r} vs shape {!r}'.
             format(x, shape)
@@ -441,7 +441,7 @@ def broadcast_to_shape(x, shape, name=None):
                 x_dynamic_shape = tf.shape(x)
 
                 for i in axis_to_check:
-                    assertions.append(tf.assert_equal(
+                    assertions.append(tf.compat.v1.assert_equal(
                         tf.logical_or(
                             tf.equal(x_dynamic_shape[i], shape[i]),
                             tf.equal(x_dynamic_shape[i], 1),
@@ -483,7 +483,7 @@ def broadcast_to_shape(x, shape, name=None):
         t.set_shape(static_shape)
 
         if post_assert_shape:
-            post_assert_op = tf.assert_equal(
+            post_assert_op = tf.compat.v1.assert_equal(
                 tf.reduce_all(tf.equal(tf.shape(t)[-tf.size(shape):], shape)),
                 True,
                 message=cannot_broadcast_msg
@@ -523,7 +523,7 @@ def broadcast_to_shape_strict(x, shape, name=None):
     else:
         shape = tuple(int(s) for s in shape)
 
-    with tf.name_scope(name=name or 'broadcast_to_shape', values=ns_values):
+    with tf.compat.v1.name_scope(name=name or 'broadcast_to_shape', values=ns_values):
         cannot_broadcast_msg = (
             '`x` cannot be broadcasted to match `shape`: x {!r} vs shape {!r}'.
             format(x, shape)
@@ -535,7 +535,7 @@ def broadcast_to_shape_strict(x, shape, name=None):
                 raise ValueError(cannot_broadcast_msg)
         elif isinstance(shape, tuple):
             with assert_deps([
-                        tf.assert_less_equal(
+                        tf.compat.v1.assert_less_equal(
                             tf.rank(x),
                             len(shape),
                             message=cannot_broadcast_msg
@@ -555,7 +555,7 @@ def broadcast_to_shape_strict(x, shape, name=None):
                     shape = tf.identity(shape)
 
             with assert_deps([
-                        tf.assert_less_equal(
+                        tf.compat.v1.assert_less_equal(
                             tf.rank(x),
                             tf.size(shape),
                             message=cannot_broadcast_msg
@@ -686,7 +686,7 @@ def reshape_tail(input, ndims, shape, name=None):
                     raise ValueError('`shape` is not a valid shape: {} is '
                                      'not allowed.'.format(s))
 
-    with tf.name_scope(name or 'reshape_tail', values=[input]):
+    with tf.compat.v1.name_scope(name or 'reshape_tail', values=[input]):
         # assert the dimension
         with assert_deps([
                     assert_rank_at_least(

@@ -23,7 +23,7 @@ def set_random_seed(seed):
     if hasattr(random, 'seed'):
         random.seed(seeds[0])
     np.random.seed(seeds[1])
-    tf.set_random_seed(seeds[2])
+    tf.compat.v1.set_random_seed(seeds[2])
     VarScopeRandomState.set_global_seed(seeds[3])
 
 

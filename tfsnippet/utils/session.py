@@ -40,7 +40,7 @@ def create_session(lock_memory=True,
     Returns:
         tf.Session: The TensorFlow session.
     """
-    config = tf.ConfigProto(log_device_placement=log_device_placement,
+    config = tf.compat.v1.ConfigProto(log_device_placement=log_device_placement,
                             allow_soft_placement=allow_soft_placement,
                             **kwargs)
     if lock_memory is False:
@@ -49,7 +49,7 @@ def create_session(lock_memory=True,
         config.gpu_options.per_process_gpu_memory_fraction = lock_memory
     elif lock_memory is not True:
         raise TypeError('`lock_memory` must be True, False or float.')
-    session = tf.Session(config=config)
+    session = tf.compat.v1.Session(config=config)
     return session
 
 
@@ -63,7 +63,7 @@ def get_default_session_or_error():
     Raises:
         RuntimeError: If there's no active session.
     """
-    ret = tf.get_default_session()
+    ret = tf.compat.v1.get_default_session()
     if ret is None:
         raise RuntimeError('No session is active')
     return ret
@@ -89,7 +89,7 @@ def get_variables_as_dict(scope=None, collection=GraphKeys.GLOBAL_VARIABLES):
             without the common scope name prefix.
     """
     # get the common prefix to be stripped
-    if isinstance(scope, tf.VariableScope):
+    if isinstance(scope, tf.compat.v1.VariableScope):
         scope_name = scope.name
     else:
         scope_name = scope
@@ -98,7 +98,7 @@ def get_variables_as_dict(scope=None, collection=GraphKeys.GLOBAL_VARIABLES):
     scope_name_len = len(scope_name) if scope_name else 0
 
     # get the variables and strip the prefix
-    variables = tf.get_collection(collection, scope_name)
+    variables = tf.compat.v1.get_collection(collection, scope_name)
     return {
         var.name[scope_name_len:].rsplit(':', 1)[0]: var
         for var in variables
@@ -120,12 +120,12 @@ def get_uninitialized_variables(variables=None, name=None):
     """
     sess = get_default_session_or_error()
     if variables is None:
-        variables = tf.global_variables()
+        variables = tf.compat.v1.global_variables()
     else:
         variables = list(variables)
-    with tf.name_scope(name, default_name='get_uninitialized_variables'):
+    with tf.compat.v1.name_scope(name, default_name='get_uninitialized_variables'):
         init_flag = sess.run(tf.stack(
-            [tf.is_variable_initialized(v) for v in variables]
+            [tf.compat.v1.is_variable_initialized(v) for v in variables]
         ))
     return [v for v, f in zip(variables, init_flag) if not f]
 
@@ -142,13 +142,13 @@ def ensure_variables_initialized(variables=None, name=None):
         name (str): TensorFlow name scope of the graph nodes. (default
             `ensure_variables_initialized`)
     """
-    with tf.name_scope(name, default_name='ensure_variables_initialized'):
+    with tf.compat.v1.name_scope(name, default_name='ensure_variables_initialized'):
         if isinstance(variables, dict):
             variables = list(six.itervalues(variables))
         uninitialized = get_uninitialized_variables(variables)
         if uninitialized:
             sess = get_default_session_or_error()
-            sess.run(tf.variables_initializer(uninitialized))
+            sess.run(tf.compat.v1.variables_initializer(uninitialized))
 
 
 def get_variable_ddi(name,
@@ -181,7 +181,7 @@ def get_variable_ddi(name,
         tf.Variable or tf.Tensor: The variable or the tensor.
     """
     # TODO: detect shape from `initial_value` if not specified
-    v = tf.get_variable(
+    v = tf.compat.v1.get_variable(
         name, shape=shape, dtype=dtype, regularizer=regularizer,
         constraint=constraint, trainable=trainable, collections=collections,
         **kwargs
