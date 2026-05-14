@@ -133,7 +133,7 @@ def resnet_general_block(conv_fn,
             x = fn(x)
         return x
 
-    with tf.variable_scope(scope, default_name=name or 'resnet_general_block'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'resnet_general_block'):
         # build the shortcut path
         if has_non_unit_item(strides) or in_channels != out_channels:
             shortcut = resize_conv(input, shortcut_kernel_size, name='shortcut')
@@ -150,7 +150,7 @@ def resnet_general_block(conv_fn,
             conv1 = partial(keep_conv, kernel_size=kernel_size, name='conv_1',
                             n_channels=out_channels)
 
-        with tf.variable_scope('residual'):
+        with tf.compat.v1.variable_scope('residual'):
             residual = input
             residual = apply_fn(normalizer_fn, residual)
             residual = apply_fn(activation_fn, residual)
@@ -183,7 +183,7 @@ def resnet_conv2d_block(input,
                         kernel_regularizer=None,
                         kernel_constraint=None,
                         use_bias=None,
-                        bias_initializer=tf.zeros_initializer(),
+                        bias_initializer=tf.compat.v1.zeros_initializer(),
                         bias_regularizer=None,
                         bias_constraint=None,
                         trainable=True,
@@ -291,7 +291,7 @@ def resnet_deconv2d_block(input,
                           kernel_regularizer=None,
                           kernel_constraint=None,
                           use_bias=None,
-                          bias_initializer=tf.zeros_initializer(),
+                          bias_initializer=tf.compat.v1.zeros_initializer(),
                           bias_regularizer=None,
                           bias_constraint=None,
                           trainable=True,

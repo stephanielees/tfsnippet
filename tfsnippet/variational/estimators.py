@@ -33,7 +33,7 @@ def sgvb_estimator(values, axis=None, keepdims=False, name=None):
             with SGVB gradient estimator.
     """
     values = tf.convert_to_tensor(values)
-    with tf.name_scope(name, default_name='sgvb_estimator', values=[values]):
+    with tf.compat.v1.name_scope(name, default_name='sgvb_estimator', values=[values]):
         estimator = values
         if axis is not None:
             estimator = tf.reduce_mean(estimator, axis=axis, keepdims=keepdims)
@@ -72,7 +72,7 @@ def iwae_estimator(log_values, axis, keepdims=False, name=None):
     """
     _require_multi_samples(axis, 'iwae estimator')
     log_values = tf.convert_to_tensor(log_values)
-    with tf.name_scope(name, default_name='iwae_estimator',
+    with tf.compat.v1.name_scope(name, default_name='iwae_estimator',
                        values=[log_values]):
         estimator = log_mean_exp(log_values, axis=axis, keepdims=keepdims)
         return estimator

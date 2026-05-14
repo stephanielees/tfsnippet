@@ -21,7 +21,7 @@ def l2_regularizer(lambda_, name=None):
     """
     def regularizer(input):
         input = tf.convert_to_tensor(input)
-        with tf.name_scope(name, default_name='l2_regularization',
+        with tf.compat.v1.name_scope(name, default_name='l2_regularization',
                            values=[input]):
             return lambda_ * tf.nn.l2_loss(input)
 

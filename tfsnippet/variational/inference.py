@@ -253,7 +253,7 @@ class VariationalTrainingObjectives(object):
         See Also:
             :func:`tfsnippet.variational.sgvb_estimator`
         """
-        with tf.name_scope(name, default_name='sgvb'):
+        with tf.compat.v1.name_scope(name, default_name='sgvb'):
             return -sgvb_estimator(
                 values=self._vi.log_joint - self._vi.latent_log_prob,
                 axis=self._vi.axis
@@ -280,7 +280,7 @@ class VariationalTrainingObjectives(object):
         """
         # reinforce requires extra variables to collect the moving average
         # statistics, so we need to generate a variable scope
-        with tf.variable_scope(name, default_name='reinforce'):
+        with tf.compat.v1.variable_scope(name, default_name='reinforce'):
             return self._vi.zs_elbo().reinforce(
                 variance_reduction=variance_reduction,
                 baseline=baseline,
@@ -303,7 +303,7 @@ class VariationalTrainingObjectives(object):
             :func:`tfsnippet.variational.iwae_estimator`
         """
         _require_multi_samples(self._vi.axis, 'iwae training objective')
-        with tf.name_scope(name, default_name='iwae'):
+        with tf.compat.v1.name_scope(name, default_name='iwae'):
             return -iwae_estimator(
                 log_values=self._vi.log_joint - self._vi.latent_log_prob,
                 axis=self._vi.axis
@@ -324,7 +324,7 @@ class VariationalTrainingObjectives(object):
             :meth:`zhusuan.variational.ImportanceWeightedObjective.vimco`
         """
         _require_multi_samples(self._vi.axis, 'vimco training objective')
-        with tf.name_scope(name, default_name='vimco'):
+        with tf.compat.v1.name_scope(name, default_name='vimco'):
             return self._vi.zs_importance_weighted_objective().vimco()
 
     def rws_wake(self, name=None):
@@ -343,7 +343,7 @@ class VariationalTrainingObjectives(object):
         """
         _require_multi_samples(
             self._vi.axis, 'reweighted wake-sleep training objective')
-        with tf.name_scope(name, default_name='rws_wake'):
+        with tf.compat.v1.name_scope(name, default_name='rws_wake'):
             return self._vi.zs_klpq().rws()
 
 

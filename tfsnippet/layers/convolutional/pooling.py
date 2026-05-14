@@ -20,7 +20,7 @@ def _pool2d(pool_fn, input, pool_size, strides=(1, 1), channels_last=True,
     ksize = validate_conv2d_strides_tuple('pool_size', pool_size, channels_last)
 
     # call pooling
-    with tf.name_scope(name, default_name=default_name):
+    with tf.compat.v1.name_scope(name, default_name=default_name):
         output, s1, s2 = flatten_to_ndims(input, 4)
         output = pool_fn(
             value=output, ksize=ksize, strides=strides, padding=padding,
@@ -49,7 +49,7 @@ def avg_pool2d(input, pool_size, strides=(1, 1), channels_last=True,
         tf.Tensor: The output tensor.
     """
     return _pool2d(
-        tf.nn.avg_pool,
+        tf.nn.avg_pool2d,
         input=input,
         pool_size=pool_size,
         strides=strides,
@@ -79,7 +79,7 @@ def max_pool2d(input, pool_size, strides=(1, 1), channels_last=True,
         tf.Tensor: The output tensor.
     """
     return _pool2d(
-        tf.nn.max_pool,
+        tf.nn.max_pool2d,
         input=input,
         pool_size=pool_size,
         strides=strides,
@@ -112,5 +112,5 @@ def global_avg_pool2d(input, channels_last=True, keepdims=False, name=None):
     else:
         reduce_axis = [-2, -1]
 
-    with tf.name_scope(name, default_name='global_avg_pool2d'):
+    with tf.compat.v1.name_scope(name, default_name='global_avg_pool2d'):
         return tf.reduce_mean(input, axis=reduce_axis, keepdims=keepdims)

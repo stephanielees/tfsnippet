@@ -32,7 +32,7 @@ def importance_sampling_log_likelihood(log_joint, latent_log_prob, axis,
     _require_multi_samples(axis, 'importance sampling log-likelihood')
     log_joint = tf.convert_to_tensor(log_joint)
     latent_log_prob = tf.convert_to_tensor(latent_log_prob)
-    with tf.name_scope(name, default_name='importance_sampling_log_likelihood',
+    with tf.compat.v1.name_scope(name, default_name='importance_sampling_log_likelihood',
                        values=[log_joint, latent_log_prob]):
         log_p = log_mean_exp(
             log_joint - latent_log_prob, axis=axis, keepdims=keepdims)

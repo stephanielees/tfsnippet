@@ -18,6 +18,6 @@ def default_kernel_initializer(weight_norm=False):
         The default initializer for kernels.
     """
     if weight_norm not in (False, None):
-        return tf.random_normal_initializer(0., .05)
+        return tf.compat.v1.random_normal_initializer(0., .05)
     else:
-        return tf.glorot_normal_initializer()
+        return tf.compat.v1.glorot_normal_initializer()

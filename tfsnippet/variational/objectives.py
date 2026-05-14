@@ -33,7 +33,7 @@ def elbo_objective(log_joint, latent_log_prob, axis=None, keepdims=False,
     """
     log_joint = tf.convert_to_tensor(log_joint)
     latent_log_prob = tf.convert_to_tensor(latent_log_prob)
-    with tf.name_scope(name,
+    with tf.compat.v1.name_scope(name,
                        default_name='elbo_objective',
                        values=[log_joint, latent_log_prob]):
         objective = log_joint - latent_log_prob
@@ -73,7 +73,7 @@ def monte_carlo_objective(log_joint, latent_log_prob, axis=None,
     _require_multi_samples(axis, 'monte carlo objective')
     log_joint = tf.convert_to_tensor(log_joint)
     latent_log_prob = tf.convert_to_tensor(latent_log_prob)
-    with tf.name_scope(name,
+    with tf.compat.v1.name_scope(name,
                        default_name='monte_carlo_objective',
                        values=[log_joint, latent_log_prob]):
         likelihood = log_joint - latent_log_prob

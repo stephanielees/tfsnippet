@@ -177,6 +177,6 @@ class Distribution(object):
         Returns:
             tf.Tensor: The densities of `given`.
         """
-        with tf.name_scope(
+        with tf.compat.v1.name_scope(
                 name, default_name=get_default_scope_name('prob', self)):
             return tf.exp(self.log_prob(given, group_ndims=group_ndims))

@@ -19,7 +19,7 @@ def add_n_broadcast(tensors, name=None):
     tensors = [tf.convert_to_tensor(t) for t in tensors]
     if not tensors:
         raise ValueError('`tensors` must not be empty.')
-    with tf.name_scope(name, default_name='add_n_broadcast', values=tensors):
+    with tf.compat.v1.name_scope(name, default_name='add_n_broadcast', values=tensors):
         ret = tensors[0]
         for t in tensors[1:]:
             ret += t
@@ -54,7 +54,7 @@ def log_sum_exp(x, axis=None, keepdims=False, name=None):
     """
     axis = validate_int_tuple_arg('axis', axis, nullable=True)
     x = tf.convert_to_tensor(x)
-    with tf.name_scope(name, default_name='log_sum_exp', values=[x]):
+    with tf.compat.v1.name_scope(name, default_name='log_sum_exp', values=[x]):
         x_max_keepdims = tf.reduce_max(x, axis=axis, keepdims=True)
         if not keepdims:
             x_max = tf.squeeze(x_max_keepdims, axis=axis)
@@ -62,7 +62,7 @@ def log_sum_exp(x, axis=None, keepdims=False, name=None):
             x_max = x_max_keepdims
         sum_exp = tf.reduce_sum(tf.exp(x - x_max_keepdims), axis=axis,
                                 keepdims=keepdims)
-        return x_max + tf.log(sum_exp)
+        return x_max + tf.math.log(sum_exp)
 
 
 @add_name_arg_doc
@@ -93,7 +93,7 @@ def log_mean_exp(x, axis=None, keepdims=False, name=None):
     """
     axis = validate_int_tuple_arg('axis', axis, nullable=True)
     x = tf.convert_to_tensor(x)
-    with tf.name_scope(name, default_name='log_mean_exp', values=[x]):
+    with tf.compat.v1.name_scope(name, default_name='log_mean_exp', values=[x]):
         x = tf.convert_to_tensor(x)
         x_max_keepdims = tf.reduce_max(x, axis=axis, keepdims=True)
         if not keepdims:
@@ -102,4 +102,4 @@ def log_mean_exp(x, axis=None, keepdims=False, name=None):
             x_max = x_max_keepdims
         mean_exp = tf.reduce_mean(tf.exp(x - x_max_keepdims), axis=axis,
                                   keepdims=keepdims)
-        return x_max + tf.log(mean_exp)
+        return x_max + tf.math.log(mean_exp)

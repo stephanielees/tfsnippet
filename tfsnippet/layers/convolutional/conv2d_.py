@@ -35,7 +35,7 @@ def conv2d(input,
            kernel_constraint=None,
            use_bias=None,
            bias=None,
-           bias_initializer=tf.zeros_initializer(),
+           bias_initializer=tf.compat.v1.zeros_initializer(),
            bias_regularizer=None,
            bias_constraint=None,
            trainable=True,
@@ -122,7 +122,7 @@ def conv2d(input,
         bias = bias_spec.validate('bias', bias)
 
     # the main part of the conv2d layer
-    with tf.variable_scope(scope, default_name=name or 'conv2d'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'conv2d'):
         # create the variables
         if kernel is None:
             kernel = model_variable(
@@ -162,7 +162,7 @@ def conv2d(input,
         else:
             output = tf.nn.conv2d(
                 input=output,
-                filter=kernel,
+                filters=kernel,
                 strides=strides,
                 padding=padding,
                 data_format=data_format,
@@ -205,7 +205,7 @@ def deconv2d(input,
              kernel_constraint=None,
              use_bias=None,
              bias=None,
-             bias_initializer=tf.zeros_initializer(),
+             bias_initializer=tf.compat.v1.zeros_initializer(),
              bias_regularizer=None,
              bias_constraint=None,
              trainable=True,
@@ -299,8 +299,8 @@ def deconv2d(input,
         bias = bias_spec.validate('bias', bias)
 
     # the main part of the conv2d layer
-    with tf.variable_scope(scope, default_name=name or 'deconv2d'):
-        with tf.name_scope('output_shape'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'deconv2d'):
+        with tf.compat.v1.name_scope('output_shape'):
             # detect the input shape and axis arrangements
             input_shape = get_static_shape(input)
             if channels_last:
@@ -398,8 +398,8 @@ def deconv2d(input,
 
         # do convolution or deconvolution
         output = tf.nn.conv2d_transpose(
-            value=output,
-            filter=kernel,
+            input=output,
+            filters=kernel,
             output_shape=output_shape,
             strides=strides,
             padding=padding,

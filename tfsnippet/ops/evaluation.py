@@ -27,12 +27,12 @@ def bits_per_dimension(log_p, value_size, scale=256., name=None):
     log_p = tf.convert_to_tensor(log_p)
     dtype = log_p.dtype.base_dtype
 
-    with tf.name_scope(name, default_name='bits_per_dimension', values=[log_p]):
+    with tf.compat.v1.name_scope(name, default_name='bits_per_dimension', values=[log_p]):
         if scale is not None:
             scale = tf.convert_to_tensor(scale)
             if scale.dtype != dtype:
                 scale = tf.cast(scale, dtype=dtype)
-            nll = tf.log(scale) * value_size - log_p
+            nll = tf.math.log(scale) * value_size - log_p
         else:
             nll = -log_p
         ret = nll / (np.log(2) * value_size)

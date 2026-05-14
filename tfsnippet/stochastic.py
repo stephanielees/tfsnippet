@@ -49,7 +49,7 @@ class StochasticTensor(TensorWrapper):
 
         n_samples = validate_n_samples_arg(n_samples, 'n_samples')
         if n_samples is not None:
-            with tf.name_scope('validate_n_samples'):
+            with tf.compat.v1.name_scope('validate_n_samples'):
                 validator = TensorArgValidator('n_samples')
                 n_samples = validator.require_non_negative(
                     validator.require_int32(n_samples)
@@ -173,11 +173,11 @@ class StochasticTensor(TensorWrapper):
         """
         if group_ndims is None or group_ndims == self.group_ndims:
             if self._self_prob is None:
-                with tf.name_scope(name, default_name='StochasticTensor.prob'):
+                with tf.compat.v1.name_scope(name, default_name='StochasticTensor.prob'):
                     self._self_prob = tf.exp(self.log_prob())
             return self._self_prob
         else:
-            with tf.name_scope(name, default_name='StochasticTensor.prob'):
+            with tf.compat.v1.name_scope(name, default_name='StochasticTensor.prob'):
                 log_p = self.distribution.log_prob(self.tensor, group_ndims)
                 return tf.exp(log_p)
 

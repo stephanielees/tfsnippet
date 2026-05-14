@@ -213,7 +213,7 @@ class MetricLogger(object):
                     self._metrics_skip_counter[k] = 0
                     tag = self._summary_metric_prefix + k
                     tf_summary_values.append(
-                        tf.summary.Summary.Value(
+                        tf.compat.v1.summary.Summary.Value(
                             tag=tag, simple_value=v.mean()
                         )
                     )
@@ -221,7 +221,7 @@ class MetricLogger(object):
                     self._metrics_skip_counter[k] = skip_count + 1
 
         if tf_summary_values:
-            summary = tf.summary.Summary(value=tf_summary_values)
+            summary = tf.compat.v1.summary.Summary(value=tf_summary_values)
             if global_step is not None and \
                     isinstance(global_step, (tf.Variable, tf.Tensor)):
                 global_step = get_default_session_or_error().run(global_step)

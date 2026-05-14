@@ -180,7 +180,7 @@ class ActNorm(FeatureMappingFlow):
                                  'x {} vs variable shape {}.'.
                                  format(x, self._var_shape_aligned))
 
-            with tf.name_scope('initialization'):
+            with tf.compat.v1.name_scope('initialization'):
                 x_mean, x_var = tf.nn.moments(x, reduce_axis)
                 x_mean = tf.reshape(x_mean, self._var_shape)
                 x_var = maybe_check_numerics(
@@ -192,7 +192,7 @@ class ActNorm(FeatureMappingFlow):
                 if self._scale_type == 'exp':
                     pre_scale = self._pre_scale.assign(
                         -tf.constant(.5, dtype=dtype) *
-                        tf.log(tf.maximum(x_var, self._epsilon))
+                        tf.math.log(tf.maximum(x_var, self._epsilon))
                     )
                     pre_scale = maybe_check_numerics(
                         pre_scale, 'numeric issues in initializing log_scale')
@@ -227,7 +227,7 @@ class ActNorm(FeatureMappingFlow):
         # compute log_det
         log_det = None
         if compute_log_det:
-            with tf.name_scope('log_det'):
+            with tf.compat.v1.name_scope('log_det'):
                 log_det = scale.log_scale()
                 reduce_ndims1 = min(
                     self.value_ndims, len(self._var_shape_aligned))
@@ -296,7 +296,7 @@ class ActNorm(FeatureMappingFlow):
         # compute log_det
         log_det = None
         if compute_log_det:
-            with tf.name_scope('log_det'):
+            with tf.compat.v1.name_scope('log_det'):
                 log_det = scale.neg_log_scale()
                 reduce_ndims1 = min(
                     self.value_ndims, len(self._var_shape_aligned))

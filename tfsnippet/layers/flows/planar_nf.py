@@ -34,11 +34,11 @@ class PlanarNormalizingFlow(FeatureMappingFlow):
 
     @add_name_and_scope_arg_doc
     def __init__(self,
-                 w_initializer=tf.random_normal_initializer(0., 0.01),
+                 w_initializer=tf.compat.v1.random_normal_initializer(0., 0.01),
                  w_regularizer=None,
-                 b_initializer=tf.zeros_initializer(),
+                 b_initializer=tf.compat.v1.zeros_initializer(),
                  b_regularizer=None,
-                 u_initializer=tf.random_normal_initializer(0., 0.01),
+                 u_initializer=tf.compat.v1.random_normal_initializer(0., 0.01),
                  u_regularizer=None,
                  trainable=True,
                  name=None,
@@ -128,7 +128,7 @@ class PlanarNormalizingFlow(FeatureMappingFlow):
             phi = grad * w  # shape == [?, n_units]
             u_phi = tf.matmul(phi, u_hat, transpose_b=True)  # shape == [?, 1]
             det_jac = 1. + u_phi  # shape == [?, 1]
-            log_det = tf.log(tf.abs(det_jac))  # shape == [?, 1]
+            log_det = tf.math.log(tf.abs(det_jac))  # shape == [?, 1]
             log_det = unflatten_from_ndims(tf.squeeze(log_det, -1), s1, s2)
 
         # now returns the transformed sample and log-determinant
@@ -142,11 +142,11 @@ class PlanarNormalizingFlow(FeatureMappingFlow):
 @add_name_and_scope_arg_doc
 def planar_normalizing_flows(
         n_layers=1,
-        w_initializer=tf.random_normal_initializer(0., 0.01),
+        w_initializer=tf.compat.v1.random_normal_initializer(0., 0.01),
         w_regularizer=None,
-        b_initializer=tf.zeros_initializer(),
+        b_initializer=tf.compat.v1.zeros_initializer(),
         b_regularizer=None,
-        u_initializer=tf.random_normal_initializer(0., 0.01),
+        u_initializer=tf.compat.v1.random_normal_initializer(0., 0.01),
         u_regularizer=None,
         trainable=True,
         name=None,
@@ -185,7 +185,7 @@ def planar_normalizing_flows(
         return PlanarNormalizingFlow(name=name, scope=scope, **flow_kwargs)
 
     else:
-        with tf.variable_scope(
+        with tf.compat.v1.variable_scope(
                 scope, default_name=name or 'planar_normalizing_flows'):
             flows = []
             for i in range(n_layers):

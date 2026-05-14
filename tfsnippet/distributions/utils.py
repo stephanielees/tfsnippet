@@ -38,7 +38,7 @@ def reduce_group_ndims(operation, tensor, group_ndims, name=None):
             :meth:`validate_group_ndims`.
     """
     group_ndims = validate_group_ndims_arg(group_ndims)
-    with tf.name_scope(name, default_name='reduce_group_ndims'):
+    with tf.compat.v1.name_scope(name, default_name='reduce_group_ndims'):
         if is_tensor_object(group_ndims):
             tensor = tf.cond(
                 group_ndims > 0,

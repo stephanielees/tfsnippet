@@ -39,7 +39,7 @@ def is_log_det_shape_matches_input(log_det, input, value_ndims, name=None):
         input = tf.convert_to_tensor(input)
     value_ndims = int(value_ndims)
 
-    with tf.name_scope(name or 'is_log_det_shape_matches_input'):
+    with tf.compat.v1.name_scope(name or 'is_log_det_shape_matches_input'):
         log_det_shape = get_static_shape(log_det)
         input_shape = get_static_shape(input)
 
@@ -108,7 +108,7 @@ def assert_log_det_shape_matches_input(log_det, input, value_ndims, name=None):
         input = tf.convert_to_tensor(input)
     value_ndims = int(value_ndims)
 
-    with tf.name_scope(name or 'assert_log_det_shape_matches_input'):
+    with tf.compat.v1.name_scope(name or 'assert_log_det_shape_matches_input'):
         cmp_result = is_log_det_shape_matches_input(log_det, input, value_ndims)
         error_message = (
             'The shape of `log_det` does not match the shape of '
@@ -123,7 +123,7 @@ def assert_log_det_shape_matches_input(log_det, input, value_ndims, name=None):
             return None
 
         else:
-            return tf.assert_equal(cmp_result, True, message=error_message)
+            return tf.compat.v1.assert_equal(cmp_result, True, message=error_message)
 
 
 @add_name_arg_doc
@@ -143,7 +143,7 @@ def broadcast_log_det_against_input(log_det, input, value_ndims, name=None):
     input = tf.convert_to_tensor(input)
     value_ndims = int(value_ndims)
 
-    with tf.name_scope(name or 'broadcast_log_det_to_input_shape',
+    with tf.compat.v1.name_scope(name or 'broadcast_log_det_to_input_shape',
                        values=[log_det, input]):
         shape = get_shape(input)
         if value_ndims > 0:
@@ -197,7 +197,7 @@ class Scale(object):
     def scale(self):
         """Compute `f(pre_scale)`."""
         if self._cached_scale is None:
-            with tf.name_scope('scale', values=[self._pre_scale]):
+            with tf.compat.v1.name_scope('scale', values=[self._pre_scale]):
                 self._cached_scale = maybe_check_numerics(
                     self._scale(),
                     message=('numeric issues in {}.scale'.
@@ -208,7 +208,7 @@ class Scale(object):
     def inv_scale(self):
         """Compute `1. / f(pre_scale)`."""
         if self._cached_inv_scale is None:
-            with tf.name_scope('inv_scale', values=[self._pre_scale]):
+            with tf.compat.v1.name_scope('inv_scale', values=[self._pre_scale]):
                 self._cached_inv_scale = maybe_check_numerics(
                     self._inv_scale(),
                     message=('numeric issues in {}.inv_scale'.
@@ -219,7 +219,7 @@ class Scale(object):
     def log_scale(self):
         """Compute `log(f(pre_scale))`."""
         if self._cached_log_scale is None:
-            with tf.name_scope('log_scale', values=[self._pre_scale]):
+            with tf.compat.v1.name_scope('log_scale', values=[self._pre_scale]):
                 self._cached_log_scale = maybe_check_numerics(
                     self._log_scale(),
                     message=('numeric issues in {}.log_scale'.
@@ -230,7 +230,7 @@ class Scale(object):
     def neg_log_scale(self):
         """Compute `-log(f(pre_scale))`."""
         if self._cached_neg_log_scale is None:
-            with tf.name_scope('neg_log_scale', values=[self._pre_scale]):
+            with tf.compat.v1.name_scope('neg_log_scale', values=[self._pre_scale]):
                 self._cached_neg_log_scale = maybe_check_numerics(
                     self._neg_log_scale(),
                     message=('numeric issues in {}.neg_log_scale'.
@@ -298,10 +298,10 @@ class LinearScale(Scale):
         return 1. / self._pre_scale
 
     def _log_scale(self):
-        return tf.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
+        return tf.math.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
 
     def _neg_log_scale(self):
-        return -tf.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
+        return -tf.math.log(tf.maximum(tf.abs(self._pre_scale), self._epsilon))
 
     def _div(self, x):
         # TODO: use epsilon to prevent dividing by zero

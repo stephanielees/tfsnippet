@@ -80,7 +80,7 @@ class BaseLayer(VarScopeObject):
         if not self._has_built:
             self.build(input)
 
-        with tf.name_scope(get_default_scope_name('apply', self),
+        with tf.compat.v1.name_scope(get_default_scope_name('apply', self),
                            values=ns_values):
             return self._apply(input)
 

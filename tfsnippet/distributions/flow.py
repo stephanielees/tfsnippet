@@ -91,7 +91,7 @@ class FlowDistribution(Distribution):
             raise RuntimeError('`FlowDistribution` requires `compute_prob` '
                                'not to be False.')
 
-        with tf.name_scope(
+        with tf.compat.v1.name_scope(
                 name, default_name='FlowDistribution.sample'):
             # sample from the base distribution
             x = self._distribution.sample(
@@ -120,7 +120,7 @@ class FlowDistribution(Distribution):
 
     def log_prob(self, given, group_ndims=0, name=None):
         given = tf.convert_to_tensor(given)
-        with tf.name_scope(
+        with tf.compat.v1.name_scope(
                 name,
                 default_name='FlowDistribution.log_prob',
                 values=[given]):

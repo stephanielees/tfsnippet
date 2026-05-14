@@ -107,7 +107,7 @@ class ZhuSuanDistribution(Distribution):
             def set_is_reparameterized():
                 yield self.is_reparameterized
 
-        with tf.name_scope(name=name, default_name='sample'):
+        with tf.compat.v1.name_scope(name=name, default_name='sample'):
             with set_is_reparameterized() as is_reparameterized:
                 samples = self._distribution.sample(n_samples=n_samples)
                 t = StochasticTensor(
@@ -118,13 +118,13 @@ class ZhuSuanDistribution(Distribution):
                     is_reparameterized=is_reparameterized,
                 )
                 if compute_density:
-                    with tf.name_scope('compute_prob_and_log_prob'):
+                    with tf.compat.v1.name_scope('compute_prob_and_log_prob'):
                         log_p = t.log_prob()
                         t._self_prob = tf.exp(log_p)
                 return t
 
     def log_prob(self, given, group_ndims=0, name=None):
-        with tf.name_scope(name=name,
+        with tf.compat.v1.name_scope(name=name,
                            default_name=get_default_scope_name('log_prob', self)):
             given = self._distribution._check_input_shape(given)
             log_prob = self._distribution._log_prob(given)
@@ -133,5 +133,5 @@ class ZhuSuanDistribution(Distribution):
     def prob(self, given, group_ndims=0, name=None):
         default_name = '{}.prob'.format(
             self._distribution.__class__.__name__)
-        with tf.name_scope(name, default_name=default_name):
+        with tf.compat.v1.name_scope(name, default_name=default_name):
             return tf.exp(self.log_prob(given, group_ndims=group_ndims))

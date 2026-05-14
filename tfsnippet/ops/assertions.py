@@ -41,7 +41,7 @@ def assert_scalar_equal(a, b, message=None, name=None):
             raise _make_assertion_error(
                 'a == b', '{!r} != {!r}'.format(a, b), message)
     else:
-        return tf.assert_equal(a, b, message=message, name=name)
+        return tf.compat.v1.assert_equal(a, b, message=message, name=name)
 
 
 @add_name_arg_doc
@@ -67,7 +67,7 @@ def assert_rank(x, ndims, message=None, name=None):
                 message
             )
     else:
-        return tf.assert_rank(x, ndims, message=message, name=name)
+        return tf.compat.v1.assert_rank(x, ndims, message=message, name=name)
 
 
 @add_name_arg_doc
@@ -94,7 +94,7 @@ def assert_rank_at_least(x, ndims, message=None, name=None):
                 message
             )
     else:
-        return tf.assert_rank_at_least(x, ndims, message=message, name=name)
+        return tf.compat.v1.assert_rank_at_least(x, ndims, message=message, name=name)
 
 
 @add_name_arg_doc
@@ -114,7 +114,7 @@ def assert_shape_equal(x, y, message=None, name=None):
     x = tf.convert_to_tensor(x)
     y = tf.convert_to_tensor(y)
 
-    with tf.name_scope(name or 'assert_shape_equal', values=[x, y]):
+    with tf.compat.v1.name_scope(name or 'assert_shape_equal', values=[x, y]):
         err_msg = _assertion_error_message(
             'x.shape == y.shape', '{!r} vs {!r}'.format(x, y), message)
         compare_ret = is_shape_equal(x, y)
@@ -124,4 +124,4 @@ def assert_shape_equal(x, y, message=None, name=None):
         elif compare_ret is True:
             return None
         else:
-            return tf.assert_equal(compare_ret, True, message=message)
+            return tf.compat.v1.assert_equal(compare_ret, True, message=message)

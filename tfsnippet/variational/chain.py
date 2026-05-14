@@ -48,12 +48,12 @@ class VariationalChain(object):
         else:
             latent_names = tuple(latent_names)
 
-        with tf.name_scope('VariationalChain'):
+        with tf.compat.v1.name_scope('VariationalChain'):
             if log_joint is None:
-                with tf.name_scope('model_log_joint'):
+                with tf.compat.v1.name_scope('model_log_joint'):
                     log_joint = add_n_broadcast(
                         model.local_log_probs(iter(model)))
-            with tf.name_scope('latent_log_probs'):
+            with tf.compat.v1.name_scope('latent_log_probs'):
                 latent_log_probs = variational.local_log_probs(latent_names)
 
         self._variational = variational

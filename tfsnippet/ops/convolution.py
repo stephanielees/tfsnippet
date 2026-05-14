@@ -26,9 +26,9 @@ def space_to_depth(input, block_size, channels_last=True, name=None):
     block_size = int(block_size)
     data_format = 'NHWC' if channels_last else 'NCHW'
     input = tf.convert_to_tensor(input)
-    with tf.name_scope(name or 'space_to_depth', values=[input]):
+    with tf.compat.v1.name_scope(name or 'space_to_depth', values=[input]):
         output, s1, s2 = flatten_to_ndims(input, ndims=4)
-        output = tf.space_to_depth(output, block_size, data_format=data_format)
+        output = tf.nn.space_to_depth(output, block_size, data_format=data_format)
         output = unflatten_from_ndims(output, s1, s2)
         return output
 
@@ -53,8 +53,8 @@ def depth_to_space(input, block_size, channels_last=True, name=None):
     block_size = int(block_size)
     data_format = 'NHWC' if channels_last else 'NCHW'
     input = tf.convert_to_tensor(input)
-    with tf.name_scope(name or 'space_to_depth', values=[input]):
+    with tf.compat.v1.name_scope(name or 'space_to_depth', values=[input]):
         output, s1, s2 = flatten_to_ndims(input, ndims=4)
-        output = tf.depth_to_space(output, block_size, data_format=data_format)
+        output = tf.nn.depth_to_space(output, block_size, data_format=data_format)
         output = unflatten_from_ndims(output, s1, s2)
         return output

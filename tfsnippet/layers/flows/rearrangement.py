@@ -59,7 +59,7 @@ class FeatureShufflingFlow(FeatureMappingFlow):
             'permutation', dtype=tf.int32, initializer=permutation,
             trainable=False
         )
-        self._inv_permutation = tf.invert_permutation(self._permutation)
+        self._inv_permutation = tf.math.invert_permutation(self._permutation)
 
     def _transform_or_inverse_transform(self, x, compute_y, compute_log_det,
                                         permutation):

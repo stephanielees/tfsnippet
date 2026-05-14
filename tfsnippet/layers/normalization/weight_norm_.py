@@ -63,7 +63,7 @@ def weight_norm(kernel,
     var_spec = ParamSpec(kernel_shape, dtype=dtype)
 
     if scale_initializer is None:
-        scale_initializer = tf.ones_initializer(dtype=dtype)
+        scale_initializer = tf.compat.v1.ones_initializer(dtype=dtype)
     if scale is not None:
         scale = var_spec.validate('scale', scale)
 
@@ -71,7 +71,7 @@ def weight_norm(kernel,
     axis = resolve_negative_axis(len(kernel_shape), axis)
     reduce_axis = tuple(a for a in range(len(kernel_shape)) if a not in axis)
 
-    with tf.variable_scope(scope, default_name=name or 'weight_norm'):
+    with tf.compat.v1.variable_scope(scope, default_name=name or 'weight_norm'):
         # normalize the kernel
         kernel = maybe_check_numerics(
             tf.nn.l2_normalize(kernel, axis=reduce_axis, epsilon=epsilon),

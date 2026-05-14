@@ -117,7 +117,7 @@ class SplitFlow(BaseFlow):
             x_n_right = x_n_features - x_n_left
 
             with assert_deps([
-                        tf.assert_greater_equal(
+                        tf.compat.v1.assert_greater_equal(
                             x_n_features, 2, message=err_msg)
                     ]) as asserted:
                 if asserted:  # pragma: no cover
@@ -196,7 +196,7 @@ class SplitFlow(BaseFlow):
                 y_n_right = get_shape(y2)[join_axis]
                 y_n_features = None
                 with assert_deps([
-                            tf.assert_greater_equal(
+                            tf.compat.v1.assert_greater_equal(
                                 y_n_left + y_n_right, 2, message=err_msg)
                         ]) as asserted:
                     if asserted:  # pragma: no cover

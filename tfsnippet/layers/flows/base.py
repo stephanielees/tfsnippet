@@ -185,7 +185,7 @@ class BaseFlow(BaseLayer):
 
         x = self._x_input_spec.validate('x', x)
 
-        with tf.name_scope(
+        with tf.compat.v1.name_scope(
                 name,
                 default_name=get_default_scope_name('transform', self),
                 values=[x]):
@@ -248,7 +248,7 @@ class BaseFlow(BaseLayer):
         y = tf.convert_to_tensor(y)
         y = self._y_input_spec.validate('y', y)
 
-        with tf.name_scope(
+        with tf.compat.v1.name_scope(
                 name,
                 default_name=get_default_scope_name('inverse_transform', self),
                 values=[y]):
@@ -278,7 +278,7 @@ def sum_log_det(log_det_list, name='sum_log_det'):
     some unnecessary zero tensors.
     """
     assert(not not log_det_list)
-    with tf.name_scope(name):
+    with tf.compat.v1.name_scope(name):
         log_det = log_det_list[0]
         for t in log_det_list[1:]:
             # adjust the summation order, to allow `ZeroLogDet` to opt-out
@@ -326,7 +326,7 @@ class MultiLayerFlow(BaseFlow):
         # apply transformation of each layer
         log_det_list = []
         for i in range(self._n_layers):
-            with tf.name_scope('_{}'.format(i)):
+            with tf.compat.v1.name_scope('_{}'.format(i)):
                 x, log_det = self._transform_layer(
                     layer_id=i,
                     x=x,
@@ -346,7 +346,7 @@ class MultiLayerFlow(BaseFlow):
         # apply transformation of each layer
         log_det_list = []
         for i in range(self._n_layers - 1, -1, -1):
-            with tf.name_scope('_{}'.format(i)):
+            with tf.compat.v1.name_scope('_{}'.format(i)):
                 y, log_det = self._inverse_transform_layer(
                     layer_id=i,
                     y=y,

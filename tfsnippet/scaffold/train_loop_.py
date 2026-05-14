@@ -206,7 +206,7 @@ class TrainLoop(DisposableContext):
     def _enter(self):
         # open the summary writer if required
         if self._summary_dir is not None:
-            self._summary_writer = tf.summary.FileWriter(
+            self._summary_writer = tf.compat.v1.summary.FileWriter(
                 self._summary_dir, graph=self._summary_graph)
 
         # create the metric accumulators
