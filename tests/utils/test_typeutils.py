@@ -22,14 +22,14 @@ class IsIntegerTestCase(unittest.TestCase):
         if six.PY2:
             self.assertTrue(is_integer(long(1)))
         self.assertTrue(is_integer(int(1)))
-        for dtype in [np.int, np.int8, np.int16, np.int32, np.int64,
+        for dtype in [np.int8, np.int16, np.int32, np.int64,
                       np.uint, np.uint8, np.uint16, np.uint32, np.uint64]:
             v = np.asarray([1], dtype=dtype)[0]
             self.assertTrue(
                 is_integer(v),
                 msg='{!r} should be interpreted as integer'.format(v)
             )
-        self.assertFalse(is_integer(np.asarray(0, dtype=np.int)))
+        self.assertFalse(is_integer(np.asarray(0, dtype='int')))
         for v in [float(1.0), '', object(), None, True, (), {}, []]:
             self.assertFalse(
                 is_integer(v),
@@ -40,7 +40,7 @@ class IsIntegerTestCase(unittest.TestCase):
 class IsFloatTestCase(unittest.TestCase):
 
     def test_is_float(self):
-        float_types = [float, np.float, np.float16, np.float32, np.float64]
+        float_types = [np.float16, np.float32, np.float64]
         for extra_type in ['float8', 'float128', 'float256']:
             if hasattr(np, extra_type):
                 float_types.append(getattr(np, extra_type))
